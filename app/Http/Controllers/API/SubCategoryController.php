@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SubCategory;
 use App\Models\Category;
-use App\Http\Transformers\SubCategoryTransform;
+use App\Http\Transformers\SubCategoryTransformer;
 use App\Repositories\Interfaces\SubCategoryRepositoryInterface;
 
 class SubCategoryController extends Controller
@@ -56,15 +56,15 @@ class SubCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($subCategory)
+    public function show($id)
     {
-        $subCategory = $this->subCategoryRepository->find($subCategory);
+        $subCategory = $this->subCategoryRepository->find($id);
 
-        $data = new SubCategoryTransform();
+        $transformer = new SubCategoryTransformer();
 
-        $data = $data->transform($subCategory);
+        $transformer = $data->transform($subCategory);
 
-        return response()->json(['success' => true, 'data' => $data], $this->successStatus); 
+        return response()->json(['success' => true, 'data' => $transformer], $this->successStatus); 
     }
 
     

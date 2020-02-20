@@ -3,23 +3,39 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OrderMeta;
+use App\Models\Product;
+use App\User;
+
 
 class Order extends Model
 {
-    protected $fillable = ['user_id', 'email', 'phone', 'address_id', 'type', 'discount', 'discount_code', 'tax', 'subtotal', 'total'];
+    protected $fillable = [
+        'user_id',          //integer(Foriegn key for users id)
+        'email',            //varchar(191)
+        'phone',            //integer
+        'address_id',       //integer(Foreign key for addreses id)
+        'type',             //enum(cod, prepaid)
+        'discount',         //integer(nullable)
+        'discount_code',    //varchar(nullable)
+        'tax',              //TinyInteger
+        'subtotal',         //Integer
+        'total',             //Integer
+        'status',            //TinyInteger
+    ];
 
     public function products()
     {
-    	return $this->belongsToMany('App\Product')->withPivot('quantity');
+    	return $this->belongsToMany(Product::class)->withPivot('quantity');
     }
 
     public function order_metas()
     {
-    	return $this->hasMany('App\OrderMeta');
+    	return $this->hasMany(OrderMeta::class);
     }
 
     public function user()
     {
-    	return $this->belongsTo('App\User');
+    	return $this->belongsTo(User::class);
     }
 }

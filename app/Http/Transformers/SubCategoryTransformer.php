@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 use App\Transformers\Transformer;
 use Illuminate\Database\Eloquent\Model;
 
-class SubCategoryTransform extends Transformer
+class SubCategoryTransformer extends Transformer
 {
 	
 	public function transform($subCategory)

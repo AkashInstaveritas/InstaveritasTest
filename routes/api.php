@@ -17,6 +17,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/login', 'API\Auth\LoginController@login')->name('login');
+
 /**
  * API Routes for all and single category.
  **/
@@ -26,11 +28,17 @@ Route::get('/category/{id}', 'API\CategoryController@show');
 /**
  * API Route for single subcategory and its relation.
  **/
-Route::get('/subcategory/{subCategory}', 'API\SubCategoryController@show');
+Route::get('/subcategory/{id}', 'API\SubCategoryController@show');
 
 
 /**
  * API Route for products, its details and CRUD Operations.
  **/
 Route::get('/products/all', 'API\ProductController@index');
-Route::get('/product/{product}', 'API\ProductController@show');
+Route::get('/product/{id}', 'API\ProductController@show');
+
+/**
+ * API Route for users wishlist, its details and CRUD Operations.
+ **/
+Route::post('/wishlist/products', 'API\WishListController@store')->middleware('auth:api');
+Route::get('/wishlist', 'API\WishListController@index')->middleware('auth:api');

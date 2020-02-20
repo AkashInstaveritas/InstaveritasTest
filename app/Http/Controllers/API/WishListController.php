@@ -4,20 +4,16 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Repositories\Interfaces\ProductRepositoryInterface;
-use App\Models\Product;
-use App\Http\Transformers\ProductTransformer;
+use Validator;
+use App\Models\Wishlist;
+use Illuminate\Support\Facades\Auth; 
 
-class ProductController extends Controller
+class WishListController extends Controller
 {
     public $successStatus = 200;
 
-    private $productRepository;
+    
 
-    public function __construct(ProductRepositoryInterface $productRepository)
-    {
-        $this->productRepository = $productRepository;
-    }
     /**
      * Display a listing of the resource.
      *
@@ -25,10 +21,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        
-        $data =  $this->productRepository->all();
-        
-        return response()->json(['success' => true, 'data' => $data], $this->successStatus); 
+        //
     }
 
     /**
@@ -49,7 +42,27 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = array (            
+                        'product_id' => 'required',      
+        );
+
+        $validator = Validator::make($request->all(), $rules);        
+        
+        if ($validator-> fails())
+        {               
+            return response()->json(['success' => true, 'data' => $validator->errors()], $this->successStatus);     
+        }
+
+        $user = Auth::guard('api')->user();
+
+        $wishlist = Wishlist::create([
+                        'user_id' => $user->id,
+                        'product_id' => $request->product_id,
+        ]);
+
+        $data = 'Product added to wishlist.';
+
+        return response()->json(['success' => true, 'data' => $data], $this->successStatus);  
     }
 
     /**
@@ -60,13 +73,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product =  $this->productRepository->find($id);
-
-        $transformer = new ProductTransformer();
-
-        $transformer = $transformer->transform($product);
-
-       return response()->json(['success' => true, 'data' => $transformer], $this->successStatus); 
+        //
     }
 
     /**

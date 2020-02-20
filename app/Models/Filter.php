@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\FilterOption;
+use App\Models\SubCategory;
 
 class Filter extends Model
 {
@@ -10,11 +12,11 @@ class Filter extends Model
 
     public function filteroptions()
     {
-    	return $this->hasMany('App\Models\FilterOption');
+    	return $this->hasMany(FilterOption::class);
     }
 
     public function subcategories()
     {
-    	return $this->belongsToMany('App\Models\SubCategory');
+    	return $this->belongsToMany(SubCategory::class);
     }
 }

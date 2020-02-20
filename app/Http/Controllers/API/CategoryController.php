@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SubCategory;
 use App\Models\Category;
-use DB;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 
 class CategoryController extends Controller
