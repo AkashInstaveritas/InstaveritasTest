@@ -7,16 +7,18 @@ use Illuminate\Http\Request;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Models\Product;
 use App\Http\Transformers\ProductTransformer;
+use App\Http\Controllers\API\ApiController;
 
-class ProductController extends Controller
+class ProductController extends ApiController
 {
-    public $successStatus = 200;
 
     private $productRepository;
+    private $productTransformer;
 
-    public function __construct(ProductRepositoryInterface $productRepository)
+    public function __construct(ProductRepositoryInterface $productRepository, ProductTransformer $productTransformer)
     {
         $this->productRepository = $productRepository;
+        $this->productTransformer = $productTransformer;
     }
     /**
      * Display a listing of the resource.
@@ -62,11 +64,13 @@ class ProductController extends Controller
     {
         $product =  $this->productRepository->find($id);
 
-        $transformer = new ProductTransformer();
+        $transformer =$this->productTransformer->transform($product);
 
-        $transformer = $transformer->transform($product);
-
-       return response()->json(['success' => true, 'data' => $transformer], $this->successStatus); 
+        return $this->respond([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $transformer       
+            ]); 
     }
 
     /**

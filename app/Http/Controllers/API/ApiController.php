@@ -10,16 +10,7 @@ use Illuminate\Http\Response as Res;
 
 class ApiController extends Controller
 {
-    /**
-     * Create a new authentication controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->beforeFilter('auth', ['on' => 'post']);
-    }    
-    
+     
     /**
      * @var int
      */

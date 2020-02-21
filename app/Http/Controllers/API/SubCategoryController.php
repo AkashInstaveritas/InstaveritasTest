@@ -8,16 +8,18 @@ use App\Models\SubCategory;
 use App\Models\Category;
 use App\Http\Transformers\SubCategoryTransformer;
 use App\Repositories\Interfaces\SubCategoryRepositoryInterface;
+use App\Http\Controllers\API\ApiController;
 
-class SubCategoryController extends Controller
+class SubCategoryController extends ApiController
 {
-    public $successStatus = 200;
 
     private $subCategoryRepository;
+    private $subCategoryTransformer;
 
-    public function __construct(SubCategoryRepositoryInterface $subCategoryRepository)
+    public function __construct(SubCategoryRepositoryInterface $subCategoryRepository, SubCategoryTransformer $subCategoryTransformer)
     {
         $this->subCategoryRepository = $subCategoryRepository;
+        $this->subCategoryTransformer = $subCategoryTransformer;
     }
     /**
      * Display a listing of the resource.
@@ -60,11 +62,13 @@ class SubCategoryController extends Controller
     {
         $subCategory = $this->subCategoryRepository->find($id);
 
-        $transformer = new SubCategoryTransformer();
+        $transformer =$this->subCategoryTransformer->transform($subCategory);
 
-        $transformer = $data->transform($subCategory);
-
-        return response()->json(['success' => true, 'data' => $transformer], $this->successStatus); 
+        return $this->respond([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $transformer       
+            ]); 
     }
 
     

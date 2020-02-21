@@ -9,6 +9,7 @@ use Laravel\Passport\HasApiTokens;
 use App\Models\Address;
 use App\Models\Review;
 use App\Models\Order;
+use App\Models\Product;
 
 class User extends Authenticatable
 {
@@ -56,4 +57,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class);
     }
+
+    public function wishlist()
+    {
+        return $this->belongsToMany(Product::class, 'wishlists', 'user_id', 'product_id');
+    }
+    
 }

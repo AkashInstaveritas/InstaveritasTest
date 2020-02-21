@@ -14,19 +14,18 @@ class ReviewTransformer extends Transformer
 {
 	public function transform($product)
 	{
-        dd($product);
-        
+		
         $reviews = $product->reviews->transform(function($review) {
-            	            return [
-            					'id'   => $review->id,
-            					'user' => $review->user->name,
-            					'rating' => $review->rating,
-            	                'description' => $review->description,
-            	            ];
-                         });
-
-        return $reviews;      	
-        
+					            return [
+									'id'   => $review->id,
+									'user' => $review->user->name,
+									'rating' => $review->rating,
+					                'description' => $review->description,
+					            ];
+							 });
+		
+		return $reviews->all();
+    
        			 
 	}
 

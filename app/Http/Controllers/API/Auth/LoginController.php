@@ -5,42 +5,59 @@ namespace App\Http\Controllers\API\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
-use Validator;
+use Auth;
 use Response;
-use Hash;
 use Illuminate\Support\Str;
+use App\Http\Requests\UserLoginRequest;
+use App\Http\Transformers\UserTransformer;
+use App\Http\Controllers\API\ApiController;
 
-class LoginController extends Controller
+class LoginController extends ApiController
 {
-    public $successStatus = 200;
+    private $userTransformer;
 
-    public function login(Request $request)
+    public function __construct(userTransformer $userTransformer)
     {
-        $rules = array (            
-                        'email' => 'required|string|email|max:255',
-                        'password'=> 'required'       
-                    );
-
-        $validator = Validator::make($request->all(), $rules);        
-
-        if ($validator-> fails())
-        {               
-            return response()->json(['success' => true, 'data' => $validator->errors()], $this->successStatus);     
-        }
+        $this->userTransformer = $userTransformer;    
+    }
+    
+    public function login(UserLoginRequest $request)
+    {
+        // Will return only validated data
+        
+        $validated = $request->validated();       
 
         
-        $user = User::where('email', $request->get('email'))->first();
-          
-        $auth = Hash::check($request->get('password'), $user->password);
+        $credentials = request(['email', 'password']);
 
-        if($user && $auth)
+        if(Auth::attempt($credentials))
         {
-            $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+            $user = $request->user();
             
-            return response()->json(['success' => true, 'message'=> 'Login Successfull', 'token' => $token, 'data' => $user], $this->successStatus); 
+            return $this->respond([            
+                'status' => 'success',
+                'status_code' => $this->getStatusCode(),
+                'message' => 'LogIn Successfull!',
+                'data' => $this->userTransformer->transform($user),
+                'token' =>  $user->createToken('Laravel Password Grant Client')->accessToken,      
+                ]); 
         } 
-
-            
-        return response()->json(['success' => false, 'message'=>'Incorrect Email Or Password!'], $this->successStatus); 
+        
+        return $this->respondWithError([            
+            'message' => 'Email or password is incorrect.',        
+            ]);    
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke(); 
+
+        return $this->respond([            
+                'status' => 'success',
+                'status_code' => $this->getStatusCode(),
+                'message' => 'LogOut Successfull!',    
+                ]);
+    }
+
+
 }

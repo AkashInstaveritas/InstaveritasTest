@@ -6,13 +6,22 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Wishlist;
-use Illuminate\Support\Facades\Auth; 
+use Auth;
+use App\Http\Requests\WishlistCreateRequest; 
+use App\Http\Controllers\API\ApiController;
+use App\Http\Transformers\UserTransformer;
+use App\Repositories\Eloquent\UserRepository;
 
-class WishListController extends Controller
+class WishListController extends ApiController
 {
-    public $successStatus = 200;
+    private $userTransformer;
+    private $userRepository;
 
-    
+    public function __construct(UserRepository $userRepository, UserTransformer $userTransformer)
+    {
+        $this->userTransformer = $userTransformer;
+        $this->userRepository = $userRepository;
+    }
 
     /**
      * Display a listing of the resource.
@@ -40,40 +49,43 @@ class WishListController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(WishlistCreateRequest $request)
     {
-        $rules = array (            
-                        'product_id' => 'required',      
-        );
-
-        $validator = Validator::make($request->all(), $rules);        
+        // Will return only validated data
         
-        if ($validator-> fails())
-        {               
-            return response()->json(['success' => true, 'data' => $validator->errors()], $this->successStatus);     
-        }
-
-        $user = Auth::guard('api')->user();
+        $validated = $request->validated(); 
 
         $wishlist = Wishlist::create([
-                        'user_id' => $user->id,
+                        'user_id' => auth('api')->user()->id,
                         'product_id' => $request->product_id,
         ]);
 
-        $data = 'Product added to wishlist.';
 
-        return response()->json(['success' => true, 'data' => $data], $this->successStatus);  
+        return $this->respondCreated([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'message' => 'Product added to wishlist.',       
+            ]);   
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Auth user
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        
+        $user =  $this->userRepository->find();
+
+        $transformer = $this->userTransformer->transformWishlist($user);
+
+        return $this->respond([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $transformer       
+            ]); 
     }
 
     /**
