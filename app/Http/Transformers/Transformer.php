@@ -5,7 +5,7 @@ namespace App\Transformers;
 abstract class Transformer 
 {   
 	 /*
-     * Transforms a collection of lessons
+     * Transforms a collection.
      * @param $items
      * @return array
      */

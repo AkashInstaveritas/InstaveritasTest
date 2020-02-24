@@ -6,12 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SubCategory;
 use App\Models\Category;
-use DB;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Http\Controllers\API\ApiController;
 
-class CategoryController extends Controller
+class CategoryController extends ApiController
 {
-    public $successStatus = 200;
 
     private $categoryRepository;
 
@@ -27,9 +26,13 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $data =  $this->categoryRepository->all();
+        $categories =  $this->categoryRepository->all();
 
-        return response()->json(['success' => true, 'data' => $data], $this->successStatus); 
+        return $this->respond([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $categories,       
+            ]);
     }
 
     /**
@@ -61,9 +64,13 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $data =  $this->categoryRepository->find($id);
+        $category =  $this->categoryRepository->find($id);
 
-        return response()->json(['success' => true, 'data' => $data], $this->successStatus); 
+        return $this->respond([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $category,       
+            ]);
     }
 
     /**

@@ -3,29 +3,43 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\FilterOption;
+use App\Models\Review;
+use App\Models\Brand;
+use App\Models\SubCategory;
+use App\Models\Cart;
 
 class Product extends Model
 {
-    protected $fillable = ['name', 'detail', 'description', 'image', 'extra_images', 'quantity', 'brand_id', 'featured'];
+    protected $fillable = [
+        'name',             //varchar(191) Unique
+        'detail',           //varchar(191) 
+        'description',      //Text
+        'image',            //varchar
+        'extra_images',     //Json(nullable)
+        'quantity',         //TinyInteger
+        'brand_id',         //Integer(Foriegn key for brands id)
+        'featured'          //Boolean(default 0)
+    ];
 
     public function subcategories()
     {
-    	return $this->belongsToMany('App\Models\SubCategory');
+    	return $this->belongsToMany(SubCategory::class);
     }
 
     public function filteroptions()
     {
-    	return $this->belongsToMany('App\Modles\FilterOption');
+    	return $this->belongsToMany(FilterOption::class);
     }
 
     public function reviews()
     {
-    	return $this->hasMany('App\Models\Review');
+    	return $this->hasMany(Review::class);
     }
 
     public function brand()
     {
-    	return $this->belongsTo('App\Models\Brand');
+    	return $this->belongsTo(Brand::class);
     }
 
     public function averageRating()
@@ -43,5 +57,16 @@ class Product extends Model
         $average = round($average, 1);
 
         return $average;
+    }
+
+    public function stock()
+    {
+        if($this->quantity <= 5)
+        {
+            return "Low Stock";
+        }
+
+        return "In Stock";
+
     }
 }

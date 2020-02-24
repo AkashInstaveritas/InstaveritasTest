@@ -8,5 +8,9 @@ class OrderProduct extends Model
 {
     protected $table = 'order_product';
 
-    protected $fillable = ['order_id', 'product_id', 'quantity'];
+    protected $fillable = [
+        'order_id',     //integer(Foreign key for orders id)
+        'product_id',   //integer(Foreign key for Products id)
+        'quantity'      //integer
+    ];
 }

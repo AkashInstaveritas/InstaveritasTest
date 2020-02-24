@@ -3,28 +3,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Brand;
+use App\Models\Filter;
+use App\Models\Category;
 
 class SubCategory extends Model
 {
-    protected $fillable = ['name', 'category_id'];
+    protected $fillable = [
+        'name',         //varchar(191)
+        'category_id'   //integer(Foreign key for categories id)
+    ];
 
     public function products()
     {
-    	return $this->belongsToMany('App\Models\Product');
+    	return $this->belongsToMany(Product::class);
     }
 
     public function brands()
     {
-    	return $this->belongsToMany('App\Models\Brand');
+    	return $this->belongsToMany(Brand::class);
     }
 
     public function filters()
     {
-    	return $this->belongsToMany('App\Models\Filter');
+    	return $this->belongsToMany(Filter::class);
     }
 
     public function category()
     {
-        return $this->belongsTo('App\Models\Category');
+        return $this->belongsTo(Category::class);
     }
 }

@@ -4,23 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\SubCategory;
-use App\Models\Category;
-use App\Http\Transformers\SubCategoryTransformer;
-use App\Repositories\Interfaces\SubCategoryRepositoryInterface;
-use App\Http\Controllers\API\ApiController;
 
-class SubCategoryController extends ApiController
+class OrderController extends Controller
 {
-
-    private $subCategoryRepository;
-    private $subCategoryTransformer;
-
-    public function __construct(SubCategoryRepositoryInterface $subCategoryRepository, SubCategoryTransformer $subCategoryTransformer)
-    {
-        $this->subCategoryRepository = $subCategoryRepository;
-        $this->subCategoryTransformer = $subCategoryTransformer;
-    }
     /**
      * Display a listing of the resource.
      *
@@ -60,18 +46,8 @@ class SubCategoryController extends ApiController
      */
     public function show($id)
     {
-        $subCategory = $this->subCategoryRepository->find($id);
-
-        $transformer =$this->subCategoryTransformer->transform($subCategory);
-
-        return $this->respond([            
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
-            'data' => $transformer       
-            ]); 
+        //
     }
-
-    
 
     /**
      * Show the form for editing the specified resource.

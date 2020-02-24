@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
+use App\Models\SubCategory;
 
 class Brand extends Model
 {
@@ -10,11 +12,11 @@ class Brand extends Model
 
     public function products()
     {
-    	return $this->hasMany('App\Models\Product', 'brand_id');
+    	return $this->hasMany(Product::class, 'brand_id');
     }
 
     public function subcategories()
     {
-    	return $this->belongsToMany('App\Models\SubCategory');
+    	return $this->belongsToMany(SubCategory::class);
     }
 }
