@@ -19,7 +19,7 @@ class WishlistCreateRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
+     * Validation rules when user is adding product in its wishlist.
      * @return array
      */
     public function rules()

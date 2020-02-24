@@ -6,47 +6,30 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Wishlist;
+use App\Models\Product;
 use Auth;
 use App\Http\Requests\WishlistCreateRequest; 
 use App\Http\Controllers\API\ApiController;
-use App\Http\Transformers\UserTransformer;
+use App\Http\Transformers\WishlistTransformer;
 use App\Repositories\Eloquent\UserRepository;
+
 
 class WishListController extends ApiController
 {
-    private $userTransformer;
+    private $wishlistTransformer;
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository, UserTransformer $userTransformer)
+    public function __construct(UserRepository $userRepository, WishlistTransformer $wishlistTransformer)
     {
-        $this->userTransformer = $userTransformer;
+        $this->wishlistTransformer = $wishlistTransformer;
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\WishlistCreateRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(WishlistCreateRequest $request)
@@ -56,7 +39,7 @@ class WishListController extends ApiController
         $validated = $request->validated(); 
 
         $wishlist = Wishlist::create([
-                        'user_id' => auth('api')->user()->id,
+                        'user_id' => $this->userRepository->find()->id,
                         'product_id' => $request->product_id,
         ]);
 
@@ -76,10 +59,7 @@ class WishListController extends ApiController
      */
     public function show()
     {
-        
-        $user =  $this->userRepository->find();
-
-        $transformer = $this->userTransformer->transformWishlist($user);
+        $transformer = $this->wishlistTransformer->transform($this->userRepository->find());
 
         return $this->respond([            
             'status' => 'success',
@@ -88,28 +68,6 @@ class WishListController extends ApiController
             ]); 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -119,6 +77,28 @@ class WishListController extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $this->check($id)->delete();
+        
+        return $this->respond([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'message' => 'Selected product removed from wishlist.'       
+            ]); 
+    }
+
+    /**
+     * Check the specified resource from storage exists or not.
+     *
+     * @param  int  $id
+     * @return \$object
+     */
+    private function check($id)
+    {
+        $object = Wishlist::where([
+            ['user_id', $this->userRepository->find()->id],
+            ['product_id', $id],
+            ])->firstorFail();
+        
+        return $object;
     }
 }

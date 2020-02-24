@@ -7,6 +7,7 @@ use App\Models\FilterOption;
 use App\Models\Review;
 use App\Models\Brand;
 use App\Models\SubCategory;
+use App\Models\Cart;
 
 class Product extends Model
 {
