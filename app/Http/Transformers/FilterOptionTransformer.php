@@ -2,7 +2,6 @@
 
 namespace App\Http\Transformers;
 
-use App\Models\Product;
 use App\Models\FilterOption;
 use App\Model\Filter;
 use Illuminate\Support\Collection;
@@ -12,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FilterOptionTransformer extends Transformer
 {
+    //Transform all the filter options based on the product selected along with filter it belongs to.
 	public function transform($product)
 	{
 		$options = $product->filteroptions->transform(function($option) {
@@ -27,6 +27,7 @@ class FilterOptionTransformer extends Transformer
        			 
     }
     
+    //Transform filter options based on the filter.
     public function transformFilter($filter)
     {
         $options = $filter->filteroptions->transform(function($option) {

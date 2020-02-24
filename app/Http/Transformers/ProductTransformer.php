@@ -3,11 +3,7 @@
 namespace App\Http\Transformers;
 
 use App\Models\Product;
-use App\Models\Brand;
-use App\Models\Filter;
-use App\Models\FilterOption;
 use App\Models\SubCategory;
-use App\Models\Wishlist;
 use Illuminate\Support\Collection;
 use App\Transformers\Transformer;
 use Illuminate\Database\Eloquent\Model;
@@ -25,11 +21,10 @@ class ProductTransformer extends Transformer
 		$this->optionTransformer = $optionTransformer;
     }
 		
-	
+	//Transform product along with its reviews collection and filteroptions and filters which are the acting properties.
 	public function transform($product)
 	{
 		return [
-				
 				'id'    	  => $product->id,
 				'name'  	  => $product->name,
 				'image' 	  => $product->image,
@@ -40,11 +35,11 @@ class ProductTransformer extends Transformer
 				'brand'       => $product->brand->name,
 				'quantity'	  => $product->stock(),
 				'reviews'	  => $this->reviewTransformer->transform($product),
-				'filterOptions'	  => $this->optionTransformer->transform($product),
-				            	
+				'filterOptions'	  => $this->optionTransformer->transform($product),	            	
        			];
 	}
 
+	//Transform collection of products based on the subcategory.
 	public function transformSubCategory($subCategory)
 	{
 		$products = $subCategory->products->transform(function($product) {

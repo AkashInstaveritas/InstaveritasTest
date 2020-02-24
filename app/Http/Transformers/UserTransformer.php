@@ -12,8 +12,7 @@ use App\Http\Transformers\ProductTransformer;
 
 class UserTransformer extends Transformer
 {
-    
-    
+    //Transform the user.
     public function transform($user)
     {        
         return [
@@ -21,19 +20,6 @@ class UserTransformer extends Transformer
             'email' => $user->email,
         ];   
     }
-
-	public function transformWishlist($user)
-	{
-        
-        $products = $user->wishlist->transform(function($product) {
-                        return [
-                            'id'   => $product->id,
-                            'name' => $product->name,
-                            'image' => $product->image,
-                        ];
-                    });
-
-        return $products->all();
-	}
+    
 
 }

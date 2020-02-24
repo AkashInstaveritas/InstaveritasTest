@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class ReviewTransformer extends Transformer
 {
+	//Transform reviews collection based on the selection of product.
 	public function transform($product)
 	{
-		
         $reviews = $product->reviews->transform(function($review) {
 					            return [
 									'id'   => $review->id,

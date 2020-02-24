@@ -4,21 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\SubCategory;
-use App\Models\Category;
-use App\Repositories\Interfaces\CategoryRepositoryInterface;
-use App\Http\Controllers\API\ApiController;
 
-class CategoryController extends ApiController
+class CheckoutController extends Controller
 {
-
-    private $categoryRepository;
-
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
-    {
-        $this->categoryRepository = $categoryRepository;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -26,13 +14,7 @@ class CategoryController extends ApiController
      */
     public function index()
     {
-        $categories =  $this->categoryRepository->all();
-
-        return $this->respond([            
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
-            'data' => $categories,       
-            ]);
+        //
     }
 
     /**
@@ -64,13 +46,7 @@ class CategoryController extends ApiController
      */
     public function show($id)
     {
-        $category =  $this->categoryRepository->find($id);
-
-        return $this->respond([            
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
-            'data' => $category,       
-            ]);
+        //
     }
 
     /**

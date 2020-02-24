@@ -26,7 +26,7 @@ class SubCategoryTransformer extends Transformer
 		$this->filterTransformer = $filterTransformer;
     }
 	
-	
+	//Transform the selected subcategory along with all collections of products, brands, filters.
 	public function transform($subCategory)
 	{
 		return [

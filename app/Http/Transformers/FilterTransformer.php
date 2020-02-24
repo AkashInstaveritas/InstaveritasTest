@@ -2,8 +2,6 @@
 
 namespace App\Http\Transformers;
 
-use App\User;
-use App\Models\Product;
 use App\Models\SubCategory;
 use Illuminate\Support\Collection;
 use App\Transformers\Transformer;
@@ -19,6 +17,8 @@ class FilterTransformer extends Transformer
     {
         $this->optionTransformer = $optionTransformer;
     }
+    
+    //Transform all the filters based on the subcategory along the transformed collection of all the filter options.
 	public function transform($subCategory)
 	{
 		
