@@ -41,13 +41,46 @@ class UserRepository
     * @param $id
     * @return Model
     */
-    public function find()
+    public function currentUser()
     {
         $user = auth('api')->user();
 
         return $user;
     }
 
-    
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Array $data
+     * @return \Addition of new user
+     */
+    public function create(array $data)
+    {
+        return  User::create([
+                    'name'     => $data['name'],
+                    'email' => $data['email'],
+                    'phone'     => $data['phone'],
+                    'password'  => bcrypt($data['password']), 
+                ]);
 
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Array $data
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(array $data)
+    {
+        $user =  User::findorFail($this->currentUser()->id);
+
+        return  $user->update([
+                    'name'     => $data['name'],
+                    'email' => $data['email'],
+                    'phone'     => $data['phone'], 
+                ]);
+        
+    }
 }

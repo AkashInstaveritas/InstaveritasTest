@@ -20,12 +20,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['namespace' => 'API'], function(){
 
     /**
-     * API Routes for authentication of user.
+     * API Routes for login and registration of user..
      **/
     Route::post('/login', 'Auth\LoginController@login')->name('login');
-    Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth:api');
-
-
+    Route::post('/register', 'UserController@register')->name('register');
+    
     /**
      * API Routes for all and single category.
      **/
@@ -47,7 +46,14 @@ Route::group(['namespace' => 'API'], function(){
 
 
 Route::group(['middleware' => 'auth:api', 'namespace' => 'API'], function(){
-   
+    
+    /**
+     * API Routes for login and registration of user..
+     **/
+    Route::get('/logout', 'Auth\LoginController@logout');
+    Route::get('/profile', 'UserController@show');
+    Route::patch('/profile/update', 'UserController@update');
+
     /**
      * API Route for users wishlist, its details and CRUD Operations.
      **/
@@ -60,7 +66,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'API'], function(){
      **/
     Route::post('/cart/products', 'CartController@store');
     Route::get('/cart', 'CartController@show');
-    Route::post('/cart/product/update/{id}', 'CartController@update');
+    Route::patch('/cart/product/{id}', 'CartController@update');
     Route::delete('/cart/product/{id}', 'CartController@destroy');
 
     /**

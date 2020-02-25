@@ -7,59 +7,35 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Product;
 use Auth;
-use App\Http\Requests\CartCreateRequest;
+use App\Http\Requests\AddCartRequest;
 use App\Http\Controllers\API\ApiController;
 use App\Http\Transformers\CartTransformer;
-use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Eloquent\CartRepository;
 
 class CartController extends ApiController
 {
     private $cartTransformer;
-    private $userRepository;
+    private $cartRepository;
 
-    public function __construct(UserRepository $userRepository,  CartTransformer $cartTransformer)
+    public function __construct(CartRepository $cartRepository,  CartTransformer $cartTransformer)
     {
         $this->cartTransformer = $cartTransformer;
-        $this->userRepository = $userRepository;
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $this->cartRepository = $cartRepository;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\CartCreateRequest  $request
+     * @param  \Illuminate\Http\AddCartRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CartCreateRequest $request)
+    public function store(AddCartRequest $request)
     {
         // Will return only validated data
         
         $validated = $request->validated();
 
-        $wishlist = Cart::create([
-            'user_id'    => $this->userRepository->find()->id,
-            'product_id' => $request->product_id,
-            'quantity'   => $request->quantity,
-        ]);
+        $this->cartRepository->create($request->all());
 
         return $this->respondCreated([            
             'status' => 'success',
@@ -76,13 +52,12 @@ class CartController extends ApiController
      */
     public function show()
     {
-        
-        $transformer = $this->cartTransformer->transform($this->userRepository->find());
+        $data = $this->cartTransformer->transformCollection($this->cartRepository->userCart());
 
         return $this->respond([            
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $transformer       
+            'data' => $data       
             ]);
     }
 
@@ -95,7 +70,7 @@ class CartController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        $this->check($id)->update(['quantity' => $request->quantity]);
+        $this->cartRepository->update($request->all(), $id);
         
         return $this->respond([            
             'status' => 'success',
@@ -114,7 +89,7 @@ class CartController extends ApiController
      */
     public function destroy($id)
     {
-        $this->check($id)->delete();
+        $this->cartRepository->delete($id);
         
         return $this->respond([            
             'status' => 'success',
@@ -123,19 +98,4 @@ class CartController extends ApiController
             ]);
     }
 
-    /**
-     * Check the specified resource from storage exists or not.
-     *
-     * @param  int  $id
-     * @return \$object
-     */
-    private function check($id)
-    {
-        $object = Cart::where([
-            ['user_id', $this->userRepository->find()->id],
-            ['product_id', $id],
-            ])->firstorFail();
-        
-        return $object;
-    }
 }

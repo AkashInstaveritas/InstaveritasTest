@@ -2,7 +2,7 @@
 
 namespace App\Http\Transformers;
 
-use App\Models\SubCategory;
+use App\Models\Filter;
 use Illuminate\Support\Collection;
 use App\Transformers\Transformer;
 use Illuminate\Database\Eloquent\Model;
@@ -19,19 +19,13 @@ class FilterTransformer extends Transformer
     }
     
     //Transform all the filters based on the subcategory along the transformed collection of all the filter options.
-	public function transform($subCategory)
+	public function transform($filter, $includeExtras)
 	{
-		
-        $filters = $subCategory->filters->transform(function($filter) {
-                        return [
-                            'id'   => $filter->id,
-                            'name' => $filter->name,
-                            'filterOptions' => $this->optionTransformer->transformFilter($filter),
-                        ];
-                    });
-		
-		return $filters->all();
-    
+        return [
+            'id'            => $filter->id,
+            'name'          => $filter->name,
+            'filterOptions' => $this->optionTransformer->transformCollection($filter->filteroptions),
+        ];
        			 
 	}
 

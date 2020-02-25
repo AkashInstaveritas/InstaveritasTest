@@ -2,18 +2,25 @@
 
 namespace App\Transformers;
 
+use Illuminate\Support\Collection;
+
 abstract class Transformer 
 {   
-	 /*
-     * Transforms a collection.
-     * @param $items
-     * @return array
-     */
-    public function transformCollection(array $items)
-    {        
-    	return array_map([$this->transform()], $items);    
-    }    
+    /**
+    * Transform collection
+    *
+    * @param Collection $items
+    * @param array $relations
+    * @param $includeExtras
+    * @return array
+    */
+    public function transformCollection(Collection $items, $includeExtras = false)
+    {
+        return $items->transform(function ($item, $key) use($includeExtras) {
+            return $this->transform($item, $includeExtras);
+        });
+    } 
 
-    public abstract function transform($item);
+    public abstract function transform($item, $includeExtras);
 
 }

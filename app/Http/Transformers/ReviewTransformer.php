@@ -13,20 +13,15 @@ use Illuminate\Database\Eloquent\Model;
 class ReviewTransformer extends Transformer
 {
 	//Transform reviews collection based on the selection of product.
-	public function transform($product)
+	public function transform($review, $includeExtras)
 	{
-        $reviews = $product->reviews->transform(function($review) {
-					            return [
-									'id'   => $review->id,
-									'user' => $review->user->name,
-									'rating' => $review->rating,
-					                'description' => $review->description,
-					            ];
-							 });
-		
-		return $reviews->all();
-    
-       			 
+		return [
+			'id'          => $review->id,
+			'user'        => $review->user->name,
+			'rating' 	  => $review->rating,
+			'description' => $review->description,
+		];
+
 	}
 
 }

@@ -4,22 +4,21 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\AddressCreateRequest;
-use App\Http\Requests\AddressRequest;
-use App\Models\Address;
-use App\Repositories\Eloquent\UserRepository;
+use App\Http\Requests\CreateAddressRequest;
+use App\Http\Requests\UpdateAddressRequest;
+use App\Repositories\Eloquent\AddressRepository;
 use App\Http\Controllers\API\ApiController;
 use App\Http\Transformers\AddressTransformer;
 
 class AddressController extends ApiController
 {
     private $addressTransformer;
-    private $userRepository;
+    private $addressRepository;
 
-    public function __construct(UserRepository $userRepository,  AddressTransformer $addressTransformer)
+    public function __construct(AddressRepository $addressRepository,  AddressTransformer $addressTransformer)
     {
         $this->addressTransformer = $addressTransformer;
-        $this->userRepository = $userRepository;
+        $this->addressRepository = $addressRepository;
     }
 
     /**
@@ -29,14 +28,12 @@ class AddressController extends ApiController
      */
     public function index()
     {
-        $user =  $this->userRepository->find();
-
-        $transformer = $this->addressTransformer->transformCollection($user);
+        $data = $this->addressTransformer->transformCollection($this->addressRepository->addresses());
 
         return $this->respond([            
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $transformer       
+            'data' => $data       
             ]);
     }
 
@@ -46,22 +43,12 @@ class AddressController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AddressRequest $request)
+    public function store(CreateAddressRequest $request)
     {
         // Will return only validated data
         $validated = $request->validated();
 
-        $user =  $this->userRepository->find();
-
-        $address = Address::create([
-            'user_id'    => $user->id,
-            'name' => $request->name,
-            'landmark'   => $request->landmark,
-            'city' => $request->city,
-            'pincode' => $request->pincode,
-            'state' => $request->state,
-            'country' => $request->country
-        ]);
+        $this->addressRepository->create($validated);
         
         return $this->respondCreated([            
             'status' => 'success',
@@ -78,12 +65,12 @@ class AddressController extends ApiController
      */
     public function show($id)
     {
-        $transformer = $this->addressTransformer->transform($this->check($id));
+        $data = $this->addressTransformer->transform($this->addressRepository->find($id));
 
         return $this->respond([            
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $transformer,       
+            'data' => $data,       
         ]); 
         
     }
@@ -96,19 +83,12 @@ class AddressController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AddressRequest $request, $id)
+    public function update(UpdateAddressRequest $request, $id)
     {
         // Will return only validated data
         $validated = $request->validated();
 
-        $this->check($id)->update([
-            'name'     => $request->name,
-            'landmark' => $request->landmark,
-            'city'     => $request->city,
-            'pincode'  => $request->pincode,
-            'state'    => $request->state,
-            'country'  => $request->country 
-            ]);
+        $this->addressRepository->update($validated, $id);
         
         return $this->respond([            
             'status' => 'success',
@@ -125,7 +105,7 @@ class AddressController extends ApiController
      */
     public function destroy($id)
     {
-        $this->check($id)->delete();
+        $this->addressRepository->delete($id);
         
         return $this->respond([            
             'status' => 'success',
@@ -134,19 +114,4 @@ class AddressController extends ApiController
             ]); 
     }
 
-    /**
-     * Check the specified resource from storage exists or not.
-     *
-     * @param  int  $id
-     * @return \$object
-     */
-    private function check($id)
-    {
-        $obj = Address::where([
-            ['user_id', $this->userRepository->find()->id],
-            ['id', $id],
-            ])->firstorFail();
-        
-        return $obj;
-    }
 }

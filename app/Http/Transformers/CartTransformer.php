@@ -11,34 +11,15 @@ use App\Http\Transformers\UserTransformer;
 
 class CartTransformer extends Transformer
 {
-    private $userCartTransformer;
-
-    public function __construct(UserTransformer $userCartTransformer)
-    {
-		$this->userCartTransformer = $userCartTransformer;
-    }
-    
     //Transform cart based on the authenticated user along with all the products and the total price.
-    public function transform($user)
+    public function transform($cart, $includeExtras)
 	{
-        $totalPrice = [];
-
-        foreach($user->cart as $cart)
-        {
-            $totalPrice[] = $cart->price * $cart->pivot->quantity;
-        }
-
-        return [	
-            'products' => $user->cart->transform(function($product) {
-                        return [
-                            'id'   => $product->id,
-                            'name' => $product->name,
-                            'image' => $product->image,
-                            'price' => $product->price,
-                            'quantity' => $product->pivot->quantity,
-                        ];
-                }),
-            'cartTotal'	  => array_sum($totalPrice),                    
+        return [
+            'id'   => $cart->id,
+            'name' => $cart->name,
+            'image' => $cart->image,
+            'price' => $cart->price,
+            'quantity' => $cart->pivot->quantity,
         ];
 	}
 

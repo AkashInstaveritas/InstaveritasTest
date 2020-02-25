@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Requests;
-
-use Illuminate\Foundation\Http\FormRequest;
 use Auth;
 
-class WishlistCreateRequest extends FormRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class AddCartRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,13 +19,14 @@ class WishlistCreateRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Validation rules when user is adding product in its wishlist.
+     * Validation rules when user is adding product in its cart.
      * @return array
      */
     public function rules()
     {
         return [
-            'product_id' => 'required|exists:products,id|unique:wishlists,product_id,'.auth('api')->user()->id, 
+            'product_id' => 'required|exists:products,id|unique:carts,product_id,'.auth('api')->user()->id,
+            'quantity'   => 'required|numeric|min:1|max:3' 
         ];
     }
 }

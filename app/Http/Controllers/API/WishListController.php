@@ -4,25 +4,21 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Validator;
-use App\Models\Wishlist;
-use App\Models\Product;
-use Auth;
-use App\Http\Requests\WishlistCreateRequest; 
+use App\Http\Requests\CreateWishlistRequest; 
 use App\Http\Controllers\API\ApiController;
 use App\Http\Transformers\WishlistTransformer;
-use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Eloquent\WishlistRepository;
 
 
 class WishListController extends ApiController
 {
     private $wishlistTransformer;
-    private $userRepository;
+    private $wishlistRepository;
 
-    public function __construct(UserRepository $userRepository, WishlistTransformer $wishlistTransformer)
+    public function __construct(WishlistRepository $wishlistRepository, WishlistTransformer $wishlistTransformer)
     {
         $this->wishlistTransformer = $wishlistTransformer;
-        $this->userRepository = $userRepository;
+        $this->wishlistRepository = $wishlistRepository;
     }
 
 
@@ -32,17 +28,13 @@ class WishListController extends ApiController
      * @param  \Illuminate\Http\WishlistCreateRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(WishlistCreateRequest $request)
+    public function store(CreateWishlistRequest $request)
     {
         // Will return only validated data
         
         $validated = $request->validated(); 
 
-        $wishlist = Wishlist::create([
-                        'user_id' => $this->userRepository->find()->id,
-                        'product_id' => $request->product_id,
-        ]);
-
+        $this->wishlistRepository->create($validated);
 
         return $this->respondCreated([            
             'status' => 'success',
@@ -59,12 +51,12 @@ class WishListController extends ApiController
      */
     public function show()
     {
-        $transformer = $this->wishlistTransformer->transform($this->userRepository->find());
+        $data = $this->wishlistTransformer->transformCollection($this->wishlistRepository->userWishlist());
 
         return $this->respond([            
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $transformer       
+            'data' => $data       
             ]); 
     }
 
@@ -77,8 +69,8 @@ class WishListController extends ApiController
      */
     public function destroy($id)
     {
-        $this->check($id)->delete();
-        
+        $this->wishlistRepository->delete($id);
+
         return $this->respond([            
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
@@ -86,19 +78,4 @@ class WishListController extends ApiController
             ]); 
     }
 
-    /**
-     * Check the specified resource from storage exists or not.
-     *
-     * @param  int  $id
-     * @return \$object
-     */
-    private function check($id)
-    {
-        $object = Wishlist::where([
-            ['user_id', $this->userRepository->find()->id],
-            ['product_id', $id],
-            ])->firstorFail();
-        
-        return $object;
-    }
 }

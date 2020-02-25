@@ -13,11 +13,13 @@ use App\Http\Transformers\ProductTransformer;
 class UserTransformer extends Transformer
 {
     //Transform the user.
-    public function transform($user)
+    public function transform($user, $includeExtras)
     {        
         return [
+            'id'       => $user->id,
             'fullname' => $user->name,
-            'email' => $user->email,
+            'email'    => $user->email,
+            'phone'    => $user->phone,
         ];   
     }
     
