@@ -24,9 +24,10 @@ class ProductTransformer extends Transformer
 	public function transform($product, $includeExtras=false)
 	{
 		$data = [
-			'id'    	  => $product->id,
-			'name'  	  => $product->name,
-			'image' 	  => $product->image,			            	
+			'id'    => $product->id,
+			'name' 	=> $product->name,
+			'image'	=> $product->image,
+			'price' => $product->price,			            	
 		];
 				   
 		$extras = [

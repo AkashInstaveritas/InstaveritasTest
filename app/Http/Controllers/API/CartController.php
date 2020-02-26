@@ -35,7 +35,7 @@ class CartController extends ApiController
         
         $validated = $request->validated();
 
-        $this->cartRepository->create($request->all());
+        $this->cartRepository->create($validated);
 
         return $this->respondCreated([            
             'status' => 'success',

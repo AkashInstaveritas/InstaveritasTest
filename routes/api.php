@@ -77,4 +77,12 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'API'], function(){
     Route::get('/address/{id}', 'AddressController@show');
     Route::patch('/address/{id}', 'AddressController@update');
     Route::delete('/address/{id}', 'AddressController@destroy');
+
+    /**
+     * API Route for user's orders, its details and Operations.
+     **/
+    Route::get('/orders', 'OrderController@index');
+    Route::post('/order/place', 'OrderController@store');
+    Route::get('/order/{id}', 'OrderController@show');
+    Route::get('/order/test/{id}', 'OrderController@index');
 });

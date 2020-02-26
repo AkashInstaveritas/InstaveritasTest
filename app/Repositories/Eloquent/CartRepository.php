@@ -40,7 +40,7 @@ class CartRepository
     
     public function userCart()
     {
-        $cart = $this->user->find(auth('api')->user()->id)->cart()->get();
+        $cart = $this->user->find($this->currentUser()->id)->cart()->get();
 
         return $cart;
     }
@@ -55,8 +55,8 @@ class CartRepository
     {
         return  Cart::create([
                     'user_id'    => $this->currentUser()->id,
-                    'product_id' => $request->product_id,
-                    'quantity'   => $request->quantity,
+                    'product_id' => $data['product_id'],
+                    'quantity'   => $data['quantity'],
                 ]);
         
     }

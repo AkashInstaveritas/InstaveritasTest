@@ -18,7 +18,7 @@ class ShopController extends Controller
      */
     public function index()
     {
-        if(request()->SubCategory)
+        
     }
 
     /**

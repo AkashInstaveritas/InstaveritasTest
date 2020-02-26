@@ -20,7 +20,9 @@ class CartTransformer extends Transformer
             'image' => $cart->image,
             'price' => $cart->price,
             'quantity' => $cart->pivot->quantity,
+            'total' => $cart->price * $cart->pivot->quantity,
         ];
+
 	}
 
 }

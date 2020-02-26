@@ -28,11 +28,6 @@ class CategoryController extends ApiController
     {
         $categories =  $this->categoryRepository->all();
 
-        return $this->respond([            
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
-            'data' => $categories,       
-            ]);
     }
 
     /**
@@ -64,12 +59,12 @@ class CategoryController extends ApiController
      */
     public function show($id)
     {
-        $category =  $this->categoryRepository->find($id);
+        $data =  $this->categoryRepository->find($id);
 
         return $this->respond([            
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $category,       
+            'data' => $data,       
             ]);
     }
 
