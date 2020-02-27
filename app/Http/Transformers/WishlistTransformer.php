@@ -12,18 +12,15 @@ use Illuminate\Database\Eloquent\Model;
 class WishlistTransformer extends Transformer
 {
     //Transform wishlist based on authenticated user.
-	public function transform($user)
-	{
-        
-        $products = $user->wishlist->transform(function($product) {
-                        return [
-                            'id'   => $product->id,
-                            'name' => $product->name,
-                            'image' => $product->image,
-                        ];
-                    });
+	public function transform($wishlist, $includeExtras)
+	{   
+        return [
+            'id'    => $wishlist->id,
+            'name'  => $wishlist->name,
+            'image' => $wishlist->image,
+            'price' => $wishlist->price,
+        ];
 
-        return $products->all();
     }
 
 }

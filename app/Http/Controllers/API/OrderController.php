@@ -3,10 +3,24 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateOrderRequest;
+use App\Repositories\Eloquent\OrderRepository;
+use App\Http\Controllers\API\ApiController;
+use App\Http\Transformers\OrderTransformer;
 
-class OrderController extends Controller
+class OrderController extends ApiController
 {
+    private $orderTransformer;
+    private $orderRepository;
+
+    public function __construct(OrderRepository $orderRepository,  OrderTransformer $orderTransformer)
+    {
+        $this->orderTransformer = $orderTransformer;
+        $this->orderRepository = $orderRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,28 +28,40 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $data = $this->orderTransformer->transformCollection($this->orderRepository->userOrders(), $includeExtras=false);
+
+        return $this->respond([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $data,       
+        ]); 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateOrderRequest $request)
     {
-        //
+        if($this->orderRepository->productsNoLongerAvailable())
+        {
+            return $this->respondWithError([            
+                'message' => 'Sorry! One of the products in your cart is no longer available.',       
+                ]);
+        }
+
+        $validated = $request->validated();
+
+        $this->orderRepository->create($validated);
+
+        return $this->respondCreated([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'message' => 'Order placed successfully.',       
+        ]); 
     }
 
     /**
@@ -46,7 +72,13 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = $this->orderTransformer->transform($this->orderRepository->find($id), $includeExtras=true);
+
+        return $this->respond([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $data,       
+        ]); 
     }
 
     /**

@@ -14,4 +14,5 @@ class Cart extends Model
         'quantity'      //integer
     ];
 
+
 }

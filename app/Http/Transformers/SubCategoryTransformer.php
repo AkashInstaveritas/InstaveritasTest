@@ -27,12 +27,14 @@ class SubCategoryTransformer extends Transformer
     }
 	
 	//Transform the selected subcategory along with all collections of products, brands, filters.
-	public function transform($subCategory)
+	public function transform($subCategory, $includeExtras)
 	{
 		return [
-			'products' =>  $this->productTransformer->transformSubCategory($subCategory),
-			'brands'    => $this->brandTransformer->transform($subCategory),
-			'filters'    => $this->filterTransformer->transform($subCategory),
+			'id'	   => $subCategory->id,
+			'name'	   => $subCategory->name,
+			'products' => $this->productTransformer->transformCollection($subCategory->products()->get()),
+			'brands'   => $this->brandTransformer->transformCollection($subCategory->brands()->get()),
+			'filters'  => $this->filterTransformer->transformCollection($subCategory->filters()->get()),
             
         ];
 	}

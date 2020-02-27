@@ -3,7 +3,6 @@
 namespace App\Http\Transformers;
 
 use App\Models\Product;
-use App\Models\SubCategory;
 use Illuminate\Support\Collection;
 use App\Transformers\Transformer;
 use Illuminate\Database\Eloquent\Model;
@@ -22,36 +21,31 @@ class ProductTransformer extends Transformer
     }
 		
 	//Transform product along with its reviews collection and filteroptions and filters which are the acting properties.
-	public function transform($product)
+	public function transform($product, $includeExtras=false)
 	{
-		return [
-				'id'    	  => $product->id,
-				'name'  	  => $product->name,
-				'image' 	  => $product->image,
-				'detail'	  => $product->detail,
-				'description' => $product->description,
-				'extra_image' => $product->extra_images,
-				'rating'      => $product->averageRating(),
-				'brand'       => $product->brand->name,
-				'quantity'	  => $product->stock(),
-				'reviews'	  => $this->reviewTransformer->transform($product),
-				'filterOptions'	  => $this->optionTransformer->transform($product),	            	
-       			];
-	}
+		$data = [
+			'id'    => $product->id,
+			'name' 	=> $product->name,
+			'image'	=> $product->image,
+			'price' => $product->price,			            	
+		];
+				   
+		$extras = [
+			'detail'	  => $product->detail,
+			'description' => $product->description,
+			'extra_image' => $product->extra_images,
+			'rating'      => $product->averageRating(),
+			'brand'       => $product->brand->name,
+			'quantity'	  => $product->stock(),
+			'reviews'	  => $this->reviewTransformer->transformCollection($product->reviews),
+			'filterOptions'	  => $this->optionTransformer->transformCollection($product->filteroptions()->get(), true),
+		];
 
-	//Transform collection of products based on the subcategory.
-	public function transformSubCategory($subCategory)
-	{
-		$products = $subCategory->products->transform(function($product) {
-						return [
-							'id'   => $product->id,
-							'name' => $product->name,
-							'image' => $product->image,
-						];
-					});
-		
-	    return $products->all();
-	}
+		if($includeExtras) {
+			return  array_merge($data,$extras);
+		}
 
+		return $data;
+	}
 
 }

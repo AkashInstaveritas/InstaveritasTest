@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\OrderMeta;
 use App\Models\Product;
+use App\Models\Address;
 use App\User;
 
 
@@ -26,7 +27,7 @@ class Order extends Model
 
     public function products()
     {
-    	return $this->belongsToMany(Product::class)->withPivot('quantity');
+    	return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('quantity');
     }
 
     public function order_metas()
@@ -37,5 +38,26 @@ class Order extends Model
     public function user()
     {
     	return $this->belongsTo(User::class);
+    }
+
+    public function address()
+    {
+    	return $this->belongsTo(Address::class);
+    }
+
+    public function status()
+    {
+        if($this->status == 0)
+        {
+            return "Order Placed.";
+        }
+
+        if($this->status == 1)
+        {
+            return "Order Canceled.";
+        }
+
+        return "Order Delivered.";
+
     }
 }
