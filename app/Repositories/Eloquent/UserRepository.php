@@ -79,7 +79,8 @@ class UserRepository
         return  $user->update([
                     'name'     => $data['name'],
                     'email' => $data['email'],
-                    'phone'     => $data['phone'], 
+                    'phone'     => $data['phone'],
+                    'password' => isset($data['password']) ? bcrypt($data['password']) : $user->password,
                 ]);
         
     }

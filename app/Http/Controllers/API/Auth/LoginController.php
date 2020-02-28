@@ -33,19 +33,17 @@ class LoginController extends ApiController
         if(Auth::attempt($credentials))
         {
             $user = $request->user();
-            
+    
             return $this->respond([            
                 'status' => 'success',
                 'status_code' => $this->getStatusCode(),
                 'message' => 'LogIn Successfull!',
-                'data' => $this->userTransformer->transform($user),
+                'data' => $this->userTransformer->transform($user, $includeExtras=false),
                 'token' =>  $user->createToken('Laravel Password Grant Client')->accessToken,      
                 ]); 
         } 
         
-        return $this->respondWithError([            
-            'message' => 'Email or password is incorrect.',        
-            ]);    
+        return $this->respondWithError('Email or password is incorrect.');    
     }
 
     public function logout(Request $request)
