@@ -42,7 +42,7 @@ class ProductRepository implements ProductRepositoryInterface
     */
     public function find($id)
     {
-        return $this->product->find($id);
+        return $this->product->findorFail($id);
     }
 
 }

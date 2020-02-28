@@ -3,7 +3,8 @@
 namespace App\Repositories\Eloquent;
 
 use App\User;
-use Illuminate\Database\Eloquent\Model;  
+use Illuminate\Database\Eloquent\Model; 
+use App\Models\Wishlist; 
 use Auth;
 
 

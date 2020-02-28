@@ -36,7 +36,7 @@ class WishListController extends ApiController
 
         $this->wishlistRepository->create($validated);
 
-        return $this->respondCreated([            
+        return $this->respond([            
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
             'message' => 'Product added to wishlist.',       

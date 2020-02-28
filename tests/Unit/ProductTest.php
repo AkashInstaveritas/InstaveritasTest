@@ -11,8 +11,10 @@ class ProductTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function testGetProduct()
     {
-        $this->assertTrue(true);
-    }
+            $response = $this->json('GET', '/api/categories');
+
+            $response->assertStatus(200);
+        }
 }
