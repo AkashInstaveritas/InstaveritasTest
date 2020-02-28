@@ -35,11 +35,7 @@ class UserController extends ApiController
 
         $this->userRepository->create($validated);
         
-        return $this->respondCreated([            
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
-            'message' => 'Registration Successfull.',       
-        ]); 
+        return $this->respondCreated('Registration Successfull.'); 
     }
 
     /**

@@ -8,9 +8,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class WishlistTest extends TestCase
 {
+    use DatabaseTransactions;
+    
     private $user;
 
     public function setUp() :void 

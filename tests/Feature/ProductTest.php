@@ -8,11 +8,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductTest extends TestCase
 {
     /**
-     * A basic feature test for getting a product.
+     * Test for getting a product.
      *
      * @return void
      */
@@ -35,10 +36,37 @@ class ProductTest extends TestCase
                         'rating',
                         'brand',
                         'quantity',
-                        'reviews',
-                        'filterOptions'
+                        'reviews' => [
+                            [
+                                'id',
+                                'user',
+                                'rating',
+                                'description'
+                            ]
+                        ],
+                        'filterOptions' => [
+                            [
+                                'id',
+                                'name',
+                                'filter'
+                            ]
+                        ]
                     ]
         ]);
+    }
+
+
+    /**
+     * Test for getting a product.
+     *
+     * @return void
+     */
+    public function test_for_a_product_not_found()
+    {
+        $this->expectException(ModelNotFoundException::class);
+
+        $product = Product::findorFail(20000);
+
     }
 
 
