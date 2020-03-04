@@ -27,7 +27,7 @@ class UserTest extends TestCase
                     ->assertJsonStructure([
                         'message',
                         'data' => [
-                            'id', 
+                            'id',
                             'fullname',
                             'email',
                             'phone'

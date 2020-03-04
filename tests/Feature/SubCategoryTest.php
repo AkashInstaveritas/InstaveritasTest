@@ -8,14 +8,14 @@ use Tests\TestCase;
 use App\Models\SubCategory;
 
 class SubCategoryTest extends TestCase
-{   
+{
     private $subcategory;
 
-    public function setUp() :void 
+    public function setUp() :void
     {
         parent::setUp();
 
-        $this->subcategory = SubCategory::findorFail(11);
+        $this->subcategory = SubCategory::findorFail(1);
 
     }
 

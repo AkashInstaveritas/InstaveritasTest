@@ -21,7 +21,7 @@ class UserController extends ApiController
         $this->userRepository = $userRepository;
     }
 
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -34,8 +34,8 @@ class UserController extends ApiController
         $validated = $request->validated();
 
         $this->userRepository->create($validated);
-        
-        return $this->respondCreated('Registration Successfull.'); 
+
+        return $this->respondCreated('Registration Successfull.');
     }
 
     /**
@@ -48,15 +48,15 @@ class UserController extends ApiController
     {
         $data = $this->userTransformer->transform($this->userRepository->currentUser(), $includeExtras=false);
 
-        return $this->respond([            
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $data,       
-        ]); 
-        
+            'data' => $data,
+        ]);
+
     }
 
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -69,13 +69,14 @@ class UserController extends ApiController
         // Will return only validated data
         $validated = $request->validated();
 
-        $this->userRepository->update($validated);
-        
-        return $this->respond([            
+        $data = $this->userTransformer->transform($this->userRepository->update($validated), $includeExtras=false);
+
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'message' => 'Profile updated successfully.'       
-            ]); 
+            'message' => 'Profile updated successfully.',
+            'data' => $data
+            ]);
     }
 
 }

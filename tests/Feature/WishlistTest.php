@@ -7,16 +7,14 @@ use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class WishlistTest extends TestCase
 {
-    use DatabaseTransactions;
-    
+
     private $user;
 
-    public function setUp() :void 
+    public function setUp() :void
     {
         parent::setUp();
 
@@ -24,30 +22,6 @@ class WishlistTest extends TestCase
 
         $this->actingAs($this->user, 'api');
 
-    }
-
-    /**
-     * A test to get wishlist of authenticated user.
-     *
-     * @return void
-     */
-    public function test_wishlist_of_user()
-    {
-        $response = $this->actingAs($this->user, 'api')
-                         ->json('GET', '/api/wishlist');
-                    
-
-        $response->assertStatus(200);
-        $response->assertJsonStructure([
-                'data' => [
-                   [
-                    'id',
-                    'name',
-                    'image',
-                    'price',
-                   ] 
-                ]
-        ]);
     }
 
     /**
@@ -63,10 +37,34 @@ class WishlistTest extends TestCase
 
         $response = $this->actingAs($this->user, 'api')
                          ->json('POST', '/api/wishlist/products', $data);
-                    
+
 
         $response->assertStatus(200);
         $response->assertJson(['message' => "Product added to wishlist."]);
+    }
+
+    /**
+     * A test to get wishlist of authenticated user.
+     *
+     * @return void
+     */
+    public function test_wishlist_of_user()
+    {
+        $response = $this->actingAs($this->user, 'api')
+                         ->json('GET', '/api/wishlist');
+
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'data' => [
+                        [
+                            'id',
+                            'name',
+                            'price',
+                            'image'
+                        ]
+                    ]
+                ]);
     }
 
 
@@ -82,7 +80,7 @@ class WishlistTest extends TestCase
 
         $response = $this->actingAs($this->user, 'api')
                          ->deleteJson('/api/wishlist/product/'. $product->id);
-                    
+
 
         $response->assertStatus(200);
         $response->assertJson(['message' => "Selected product removed from wishlist."]);
@@ -103,7 +101,7 @@ class WishlistTest extends TestCase
 
         $response = $this->actingAs($this->user, 'api')
                          ->json('POST', '/api/wishlist/products', $data);
-                    
+
 
         $response->assertStatus(422);
         $response->assertJson(['message' => "The given data was invalid."]);

@@ -14,7 +14,7 @@ class UpdateUserTest extends TestCase
 
     private $user;
 
-    public function setUp() :void 
+    public function setUp() :void
     {
         parent::setUp();
 
@@ -53,7 +53,7 @@ class UpdateUserTest extends TestCase
      */
     public function test_it_requires_an_unique_unused_email()
     {
-        $this->update(['email' => 'singh9800akash@gmail.com'])
+        $this->update(['email' => 'daniel.karianne@example.net'])
              ->assertJsonValidationErrors('email');
     }
 
@@ -81,7 +81,7 @@ class UpdateUserTest extends TestCase
 
 
     /**
-     * Mehtod for providing validated field and 
+     * Mehtod for providing validated field and
      * also can be overrided with incorrect data.
      */
     protected function validFields($overrides = [])
@@ -96,7 +96,7 @@ class UpdateUserTest extends TestCase
     }
 
     /**
-     * Mehtod for using the api endpoint and 
+     * Mehtod for using the api endpoint and
      * making a post request for registering a user.
      */
     protected function update($attributes = [])

@@ -8,15 +8,18 @@ use App\Models\SubCategory;
 use App\Models\Category;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Http\Controllers\API\ApiController;
+use App\Http\Transformers\CategoryTransformer;
 
 class CategoryController extends ApiController
 {
 
     private $categoryRepository;
+    private $categoryTransformer;
 
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    public function __construct(CategoryRepositoryInterface $categoryRepository, CategoryTransformer $categoryTransformer)
     {
         $this->categoryRepository = $categoryRepository;
+        $this->categoryTransformer = $categoryTransformer;
     }
 
     /**
@@ -26,12 +29,14 @@ class CategoryController extends ApiController
      */
     public function index()
     {
-        $data =  $this->categoryRepository->all();
+        $categories = $this->categoryRepository->all();
 
-        return $this->respond([            
+        $data = $this->categoryTransformer->transformCollection($categories, $includeExtras=false);
+
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $data,       
+            'data' => $data,
             ]);
 
     }
@@ -45,12 +50,14 @@ class CategoryController extends ApiController
      */
     public function show($id)
     {
-        $data =  $this->categoryRepository->find($id);
+        $category = $this->categoryRepository->find($id);
 
-        return $this->respond([            
+        $data = $this->categoryTransformer->transform($category, $includeExtras=true);
+
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $data,       
+            'data' => $data,
             ]);
     }
 

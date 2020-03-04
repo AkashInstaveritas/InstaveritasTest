@@ -40,7 +40,7 @@ class CreateUserTest extends TestCase
      */
     public function test_it_requires_a_valid_unique_email()
     {
-        $this->register(['email' => 'akashsingh@instaveritas.com'])
+        $this->register(['email' => 'daniel.karianne@example.net'])
              ->assertJsonValidationErrors('email');
     }
 
@@ -79,7 +79,7 @@ class CreateUserTest extends TestCase
 
 
     /**
-     * Mehtod for providing validated field and 
+     * Mehtod for providing validated field and
      * also can be overrided with incorrect data.
      */
     protected function validFields($overrides = [])
@@ -94,7 +94,7 @@ class CreateUserTest extends TestCase
     }
 
     /**
-     * Mehtod for using the api endpoint and 
+     * Mehtod for using the api endpoint and
      * making a post request for registering a user.
      */
     protected function register($attributes = [])
