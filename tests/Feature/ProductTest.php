@@ -19,7 +19,7 @@ class ProductTest extends TestCase
      */
     public function test_get_a_product()
     {
-        $product = Product::findorFail(9);
+        $product = Product::findorFail(1);
 
         $response = $this->json('GET', '/api/product/'.$product->id);
 

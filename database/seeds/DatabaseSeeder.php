@@ -19,14 +19,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
              $this->call([
-            // CategoriesTableSeeder::class,
-            // BrandsTableSeeder::class,
-            // FiltersTableSeeder::class,
-            // SubCategoriesRelationsTableSeeder::class,
-            // ProductsRelationsTableSeeder::class,
-            // UsersTableSeeder::class,
+            CategoriesTableSeeder::class,
+            BrandsTableSeeder::class,
+            FiltersTableSeeder::class,
+            SubCategoriesRelationsTableSeeder::class,
+            ProductsRelationsTableSeeder::class,
+            UsersTableSeeder::class,
             ProductReviewSeeder::class,
         ]);
-        
+
     }
 }

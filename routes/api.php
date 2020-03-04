@@ -24,7 +24,7 @@ Route::group(['namespace' => 'API'], function(){
      **/
     Route::post('/login', 'Auth\LoginController@login')->name('login');
     Route::post('/register', 'UserController@register')->name('register');
-    
+
     /**
      * API Routes for all and single category.
      **/
@@ -46,7 +46,7 @@ Route::group(['namespace' => 'API'], function(){
 
 
 Route::group(['middleware' => 'auth:api', 'namespace' => 'API'], function(){
-    
+
     /**
      * API Routes for login and registration of user..
      **/

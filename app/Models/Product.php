@@ -11,6 +11,8 @@ use App\Models\Cart;
 
 class Product extends Model
 {
+    protected $table = 'products';
+    
     protected $fillable = [
         'name',             //varchar(191) Unique
         'detail',           //varchar(191) 

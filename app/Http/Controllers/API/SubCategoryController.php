@@ -21,7 +21,7 @@ class SubCategoryController extends ApiController
         $this->subCategoryRepository = $subCategoryRepository;
         $this->subCategoryTransformer = $subCategoryTransformer;
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -32,14 +32,14 @@ class SubCategoryController extends ApiController
     {
         $subCategory = $this->subCategoryRepository->find($id);
 
-        $data  =$this->subCategoryTransformer->transform($subCategory, $includeExtras=false);
+        $data  =$this->subCategoryTransformer->transform($subCategory, $includeExtras=true);
 
-        return $this->respond([            
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $data       
-            ]); 
+            'data' => $data
+            ]);
     }
 
-    
+
 }

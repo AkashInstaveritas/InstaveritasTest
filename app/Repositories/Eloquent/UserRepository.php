@@ -1,31 +1,31 @@
-<?php 
+<?php
 
 namespace App\Repositories\Eloquent;
 
 use App\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use Illuminate\Database\Eloquent\Model;  
+use Illuminate\Database\Eloquent\Model;
 use Auth;
 
 
-class UserRepository 
+class UserRepository
 {
-	/**      
-     * @var Model      
-     */     
-     protected $user;       
+	/**
+     * @var Model
+     */
+     protected $user;
 
-    /**      
-     * ProductRepository constructor.      
-     *      
-     * @param Product $model      
-     */     
-    public function __construct(User $user)     
-    {         
+    /**
+     * ProductRepository constructor.
+     *
+     * @param Product $model
+     */
+    public function __construct(User $user)
+    {
         $this->user = $user;
     }
 
-	
+
 
 	/**
     * @param collection
@@ -60,7 +60,7 @@ class UserRepository
                     'name'     => $data['name'],
                     'email' => $data['email'],
                     'phone'     => $data['phone'],
-                    'password'  => bcrypt($data['password']), 
+                    'password'  => bcrypt($data['password']),
                 ]);
 
     }
@@ -76,12 +76,14 @@ class UserRepository
     {
         $user =  User::findorFail($this->currentUser()->id);
 
-        return  $user->update([
-                    'name'     => $data['name'],
-                    'email' => $data['email'],
-                    'phone'     => $data['phone'],
-                    'password' => isset($data['password']) ? bcrypt($data['password']) : $user->password,
-                ]);
-        
+        $user->update([
+            'name'     => $data['name'],
+            'email' => $data['email'],
+            'phone'     => $data['phone'],
+            'password' => isset($data['password']) ? bcrypt($data['password']) : $user->password,
+        ]);
+
+        return $user;
+
     }
 }

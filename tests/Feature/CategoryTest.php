@@ -23,7 +23,7 @@ class CategoryTest extends TestCase
                             [
                                 'id',
                                 'name',
-                            ]   
+                            ]
                         ]
                     ]);
     }
@@ -41,10 +41,14 @@ class CategoryTest extends TestCase
                     ->assertStatus(200)
                     ->assertJsonStructure([
                         'data' => [
-                            [
-                                'id',
-                                'name',
-                            ]   
+                            'id',
+                            'name',
+                            'subCategories' => [
+                                [
+                                    'id',
+                                    'name',
+                                ]
+                            ],
                         ]
                     ]);
     }

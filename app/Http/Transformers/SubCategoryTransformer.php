@@ -25,18 +25,26 @@ class SubCategoryTransformer extends Transformer
 		$this->brandTransformer = $brandTransformer;
 		$this->filterTransformer = $filterTransformer;
     }
-	
+
 	//Transform the selected subcategory along with all collections of products, brands, filters.
 	public function transform($subCategory, $includeExtras)
 	{
-		return [
-			'id'	   => $subCategory->id,
-			'name'	   => $subCategory->name,
+        $data = [
+			'id'     => $subCategory->id,
+			'name'	 => $subCategory->name,
+		];
+
+		$extras = [
 			'products' => $this->productTransformer->transformCollection($subCategory->products()->get()),
 			'brands'   => $this->brandTransformer->transformCollection($subCategory->brands()->get()),
 			'filters'  => $this->filterTransformer->transformCollection($subCategory->filters()->get()),
-            
-        ];
+		];
+
+		if($includeExtras) {
+			return  array_merge($data,$extras);
+		}
+
+		return $data;
 	}
 
 }
