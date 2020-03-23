@@ -4,8 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Cart;
-use App\Models\Product;
 use Auth;
 use App\Http\Requests\AddCartRequest;
 use App\Http\Controllers\API\ApiController;
@@ -32,16 +30,12 @@ class CartController extends ApiController
     public function store(AddCartRequest $request)
     {
         // Will return only validated data
-        
+
         $validated = $request->validated();
 
         $this->cartRepository->create($validated);
 
-        return $this->respondCreated([            
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
-            'message' => 'Product added to Cart.',       
-        ]); 
+        return $this->respondCreated('Product added to Cart.');
     }
 
     /**
@@ -52,12 +46,12 @@ class CartController extends ApiController
      */
     public function show()
     {
-        $data = $this->cartTransformer->transformCollection($this->cartRepository->userCart());
+        $data = $this->cartTransformer->transformCollection($this->cartRepository->userCart(), $includeExtras=true);
 
-        return $this->respond([            
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $data       
+            'data' => $data
             ]);
     }
 
@@ -71,16 +65,16 @@ class CartController extends ApiController
     public function update(Request $request, $id)
     {
         $this->cartRepository->update($request->all(), $id);
-        
-        return $this->respond([            
+
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'message' => 'Selected product quantity updated in cart.',  
+            'message' => 'Selected product quantity updated in cart.',
             ]);
 
     }
 
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -90,11 +84,11 @@ class CartController extends ApiController
     public function destroy($id)
     {
         $this->cartRepository->delete($id);
-        
-        return $this->respond([            
+
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'message' => 'Selected product removed from cart.',       
+            'message' => 'Selected product removed from cart.',
             ]);
     }
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\CreateWishlistRequest; 
+use App\Http\Requests\CreateWishlistRequest;
 use App\Http\Controllers\API\ApiController;
 use App\Http\Transformers\WishlistTransformer;
 use App\Repositories\Eloquent\WishlistRepository;
@@ -31,16 +31,16 @@ class WishListController extends ApiController
     public function store(CreateWishlistRequest $request)
     {
         // Will return only validated data
-        
-        $validated = $request->validated(); 
+
+        $validated = $request->validated();
 
         $this->wishlistRepository->create($validated);
 
-        return $this->respond([            
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'message' => 'Product added to wishlist.',       
-            ]);   
+            'message' => 'Product added to wishlist.',
+            ]);
     }
 
     /**
@@ -53,11 +53,11 @@ class WishListController extends ApiController
     {
         $data = $this->wishlistTransformer->transformCollection($this->wishlistRepository->userWishlist());
 
-        return $this->respond([            
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $data       
-            ]); 
+            'data' => $data
+            ]);
     }
 
 
@@ -71,11 +71,11 @@ class WishListController extends ApiController
     {
         $this->wishlistRepository->delete($id);
 
-        return $this->respond([            
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'message' => 'Selected product removed from wishlist.'       
-            ]); 
+            'message' => 'Selected product removed from wishlist.'
+            ]);
     }
 
 }

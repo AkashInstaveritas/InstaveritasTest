@@ -1,27 +1,27 @@
-<?php 
+<?php
 
 namespace App\Repositories\Eloquent;
 
 use App\User;
-use Illuminate\Database\Eloquent\Model; 
-use App\Models\Wishlist; 
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Wishlist;
 use Auth;
 
 
-class WishlistRepository 
+class WishlistRepository
 {
-	/**      
-     * @var Model      
-     */     
-     protected $user;       
+	/**
+     * @var Model
+     */
+     protected $user;
 
-    /**      
-     * ProductRepository constructor.      
-     *      
-     * @param Product $model      
-     */     
-    public function __construct(User $user)     
-    {         
+    /**
+     * ProductRepository constructor.
+     *
+     * @param Product $model
+     */
+    public function __construct(User $user)
+    {
         $this->user = $user;
     }
 
@@ -37,7 +37,7 @@ class WishlistRepository
     *
     * @return Model
     */
-    
+
     public function userWishlist()
     {
         $wishlist = $this->user->find(auth('api')->user()->id)->wishlist()->get();
@@ -53,12 +53,12 @@ class WishlistRepository
      */
     public function create(array $data)
     {
-        
+
         return  Wishlist::create([
                     'user_id' => $this->currentUser()->id,
                     'product_id' => $data['product_id'],
                 ]);
- 
+
     }
 
     /**
@@ -73,8 +73,8 @@ class WishlistRepository
                     ['user_id', $this->currentUser()->id],
                     ['product_id', $id],
                 ])->firstorFail()->delete();
-        
+
     }
-    
+
 
 }

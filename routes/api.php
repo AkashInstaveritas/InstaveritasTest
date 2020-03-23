@@ -60,7 +60,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'API'], function(){
     Route::post('/wishlist/products', 'WishListController@store');
     Route::get('/wishlist', 'WishListController@show');
     Route::delete('/wishlist/product/{id}', 'WishListController@destroy');
-
     /**
      * API Route for users cart, its details and CRUD Operations.
      **/
