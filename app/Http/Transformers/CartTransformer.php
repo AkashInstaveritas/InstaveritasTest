@@ -2,12 +2,8 @@
 
 namespace App\Http\Transformers;
 
-use App\Models\Product;
-use App\User;
 use Illuminate\Support\Collection;
 use App\Transformers\Transformer;
-use Illuminate\Database\Eloquent\Model;
-use App\Http\Transformers\UserTransformer;
 
 class CartTransformer extends Transformer
 {
