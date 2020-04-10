@@ -19,6 +19,7 @@ class WishlistTransformer extends Transformer
             'name'  => $wishlist->name,
             'image' => $wishlist->image,
             'price' => $wishlist->price,
+            'rating' => $wishlist->averageRating(),
         ];
 
     }

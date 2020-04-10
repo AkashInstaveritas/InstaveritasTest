@@ -57,7 +57,7 @@ class OrderController extends ApiController
 
         $this->orderRepository->create($validated);
 
-        return $this->respondCreated([            
+        return $this->respond([            
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
             'message' => 'Order placed successfully.',       
@@ -110,8 +110,14 @@ class OrderController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function cancelOrder($id)
     {
-        //
+        $this->orderRepository->cancel($id);
+
+        return $this->respond([            
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'message' => 'Order cancelled successfully!',       
+        ]);
     }
 }

@@ -22,6 +22,25 @@ class ProductController extends ApiController
     }
     
     
+    /**
+     * Display the specified resource.
+     *
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function featured()
+    {
+        $products =  $this->productRepository->featured();
+
+        $data = $this->productTransformer->transformCollection($products, $includeExtras=false);
+
+        return $this->respond([
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $data
+            ]);
+    }
+
 
     /**
      * Display the specified resource.
@@ -33,13 +52,13 @@ class ProductController extends ApiController
     {
         $product =  $this->productRepository->find($id);
 
-        $transformer =$this->productTransformer->transform($product, $includeExtras=true);
+        $data =$this->productTransformer->transform($product, $includeExtras=true);
 
-        return $this->respond([            
+        return $this->respond([
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $transformer       
-            ]); 
+            'data' => $data
+            ]);
     }
 
     

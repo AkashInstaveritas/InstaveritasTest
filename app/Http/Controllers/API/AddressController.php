@@ -50,7 +50,7 @@ class AddressController extends ApiController
 
         $this->addressRepository->create($validated);
         
-        return $this->respondCreated([            
+        return $this->respond([            
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
             'message' => 'Address added.',       
@@ -65,7 +65,7 @@ class AddressController extends ApiController
      */
     public function show($id)
     {
-        $data = $this->addressTransformer->transform($this->addressRepository->find($id));
+        $data = $this->addressTransformer->transform($this->addressRepository->find($id), $includeExtras=false);
 
         return $this->respond([            
             'status' => 'success',
@@ -110,7 +110,7 @@ class AddressController extends ApiController
         return $this->respond([            
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'message' => 'Selected addres removed.'       
+            'message' => 'Selected address removed!'       
             ]); 
     }
 

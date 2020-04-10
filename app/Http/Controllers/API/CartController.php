@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use App\Http\Requests\AddCartRequest;
+use App\Http\Requests\UpdateCartRequest;
 use App\Http\Controllers\API\ApiController;
 use App\Http\Transformers\CartTransformer;
 use App\Repositories\Eloquent\CartRepository;
@@ -33,9 +34,9 @@ class CartController extends ApiController
 
         $validated = $request->validated();
 
-        $this->cartRepository->create($validated);
+        $message = $this->cartRepository->create($validated);
 
-        return $this->respondCreated('Product added to Cart.');
+        return $this->respondCreated($message);
     }
 
     /**
@@ -62,8 +63,12 @@ class CartController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCartRequest $request, $id)
     {
+        // Will return only validated data
+
+        $validated = $request->validated();
+
         $this->cartRepository->update($request->all(), $id);
 
         return $this->respond([

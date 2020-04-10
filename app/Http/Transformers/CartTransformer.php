@@ -14,11 +14,12 @@ class CartTransformer extends Transformer
             'id'   => $cart->id,
             'name' => $cart->name,
             'image' => $cart->image,
+            'rating' => $cart->averageRating(),
+            'detail' => $cart->detail,
             'price' => $cart->price,
             'quantity' => $cart->pivot->quantity,
             'total' => $cart->price * $cart->pivot->quantity,
         ];
-
 	}
 
 }

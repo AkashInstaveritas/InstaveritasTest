@@ -43,7 +43,9 @@ class LoginController extends ApiController
                 ]); 
         } 
         
-        return $this->respondWithError('Email or password is incorrect.');    
+        //$error = 'Email or password is incorrect.';
+
+        return response()->json(['error' => 'Email or password is incorrect.'], 401);    
     }
 
     public function logout(Request $request)

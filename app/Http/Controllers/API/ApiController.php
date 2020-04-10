@@ -3,19 +3,18 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use Response;
 use Illuminate\Http\Response as Res;
 
 class ApiController extends Controller
 {
-     
+
     /**
      * @var int
      */
-    protected $statusCode = Res::HTTP_OK;    
-    
+    protected $statusCode = Res::HTTP_OK;
+
     /**
      * @return mixed
      */
@@ -30,18 +29,18 @@ class ApiController extends Controller
      */
     public function setStatusCode($statusCode)
     {
-        $this->statusCode = $statusCode;        
+        $this->statusCode = $statusCode;
         return $this;
     }
 
     public function respondCreated($message, $data=null)
     {
-        return $this->respond([            
+        return $this->respond([
             'status' => 'success',
             'status_code' => Res::HTTP_CREATED,
             'message' => $message,
-            'data' => $data        
-            ]);    
+            'data' => $data
+            ]);
     }
 
     /**
@@ -50,7 +49,7 @@ class ApiController extends Controller
      * @return mixed
      */
     protected function respondWithPagination(Paginator $paginate, $data, $message)
-    {       
+    {
         $data = array_merge($data, [
             'paginator' => [
                 'total_count'  => $paginate->total(),
@@ -60,53 +59,49 @@ class ApiController extends Controller
             ]
         ]);
 
-        return $this->respond([            
+        return $this->respond([
             'status' => 'success',
             'status_code' => Res::HTTP_OK,
             'message' => $message,
-            'data' => $data        
+            'data' => $data
             ]);
     }
 
     public function respondNotFound($message = 'Not Found!')
-    {        
-        return $this->respond([            
-            'status' => 'error',
-            'status_code' => Res::HTTP_NOT_FOUND,
-            'message' => $message,        
-            ]);    
+    {
+        return Response::json(['error' => $message], Res::HTTP_NOT_FOUND);
     }
 
     public function respondInternalError($message)
-    {        
-        return $this->respond([            
+    {
+        return $this->respond([
             'status' => 'error',
             'status_code' => Res::HTTP_INTERNAL_SERVER_ERROR,
-            'message' => $message,        
-            ]);    
+            'message' => $message,
+            ]);
     }
 
     public function respondValidationError($message, $errors)
-    {        
-        return $this->respond([            
+    {
+        return $this->respond([
             'status' => 'error',
             'status_code' => Res::HTTP_UNPROCESSABLE_ENTITY,
             'message' => $message,
-            'data' => $errors        
-            ]);    
+            'data' => $errors
+            ]);
     }
 
     public function respond($data, $headers = [])
-    {        
-        return Response::json($data, $this->getStatusCode(), $headers);    
-    }    
-    
+    {
+        return Response::json($data, $this->getStatusCode(), $headers);
+    }
+
     public function respondWithError($message)
     {
-        return $this->respond([            
+        return $this->respond([
             'status' => 'error',
             'status_code' => Res::HTTP_UNAUTHORIZED,
-            'message' => $message,        
+            'message' => $message,
             ]);
     }
 

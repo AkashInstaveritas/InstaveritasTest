@@ -33,11 +33,7 @@ class CategoryController extends ApiController
 
         $data = $this->categoryTransformer->transformCollection($categories, $includeExtras=false);
 
-        return $this->respond([
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
-            'data' => $data,
-            ]);
+        return $this->respond($data);
 
     }
 
@@ -54,11 +50,7 @@ class CategoryController extends ApiController
 
         $data = $this->categoryTransformer->transform($category, $includeExtras=true);
 
-        return $this->respond([
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
-            'data' => $data,
-            ]);
+        return $this->respond($data);
     }
 
 }

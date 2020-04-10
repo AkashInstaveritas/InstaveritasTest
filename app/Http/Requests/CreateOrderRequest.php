@@ -24,10 +24,7 @@ class CreateOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'email'         => 'required|email|string|max:191',
-            'phone'         => 'required|numeric|digits:10',
             'address_id'    => 'required|integer',
-            'type'          => 'in:cod,prepaid',
             'discount'      => 'nullable|integer',
             'discount_code' => 'nullable|',
             'tax'           => 'nullable|integer',

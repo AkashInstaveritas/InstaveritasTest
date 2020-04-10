@@ -45,4 +45,14 @@ class ProductRepository implements ProductRepositoryInterface
         return $this->product->findorFail($id);
     }
 
+    /**
+    * @param collection
+    *
+    * @return Model
+    */
+    public function featured()
+    {
+        return $this->product->where('featured', 1)->get();
+    }
+
 }

@@ -71,4 +71,5 @@ class Product extends Model
         return "In Stock";
 
     }
+
 }

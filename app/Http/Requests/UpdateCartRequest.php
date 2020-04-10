@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Requests;
+use Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateAddressRequest extends FormRequest
+class UpdateCartRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,18 +19,13 @@ class CreateAddressRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
+     * Validation rules when user is adding product in its cart.
      * @return array
      */
     public function rules()
     {
         return [
-            'name' => 'required|string|max:191|min:3|unique:addresses',
-            'landmark' => 'required|string|max:191|min:3',
-            'city' => 'required|string|max:191',
-            'pincode' => 'required|numeric|digits:6',
-            'state' => 'required|string|max:191|min:2',
-            'country'=> 'required'
+            'quantity'   => 'required|numeric|min:1|max:3' 
         ];
     }
 }

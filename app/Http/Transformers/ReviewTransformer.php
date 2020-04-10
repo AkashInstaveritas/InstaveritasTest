@@ -20,6 +20,7 @@ class ReviewTransformer extends Transformer
 			'user'        => $review->user->name,
 			'rating' 	  => $review->rating,
 			'description' => $review->description,
+			'date'        => $review->created_at
 		];
 
 	}
