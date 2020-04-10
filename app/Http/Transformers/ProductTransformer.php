@@ -27,14 +27,14 @@ class ProductTransformer extends Transformer
 			'id'    => $product->id,
 			'name' 	=> $product->name,
 			'image'	=> $product->image,
-			'price' => $product->price,
-			'rating'=> $product->averageRating(),
-			'detail'=> $product->detail,			            	
+			'price' => $product->price,			            	
 		];
 				   
 		$extras = [
+			'detail'	  => $product->detail,
 			'description' => $product->description,
 			'extra_image' => $product->extra_images,
+			'rating'      => $product->averageRating(),
 			'brand'       => $product->brand->name,
 			'quantity'	  => $product->stock(),
 			'reviews'	  => $this->reviewTransformer->transformCollection($product->reviews),

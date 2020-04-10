@@ -45,7 +45,7 @@ class OrderRepository
 
     public function userOrders()
     {
-        $order = $this->user->find($this->currentUser()->id)->orders()->orderBy('created_at', 'desc')->get();
+        $order = $this->user->find($this->currentUser()->id)->orders;
 
         return $order;
     }
@@ -68,10 +68,10 @@ class OrderRepository
     {
         $order  =   Order::create([
                         'user_id'       => $this->currentUser()->id,
-                        'email'         => $this->currentUser()->email,
-                        'phone'         => $this->currentUser()->phone,
+                        'email'         => $data['email'],
+                        'phone'         => $data['phone'],
                         'address_id'    => $data['address_id'],
-                        'type'          => 'cod',
+                        'type'          => $data['type'],
                         'discount'      => isset($data['discount']) ? $data['discount'] : null,
                         'discount_code' => isset($data['discount_code']) ? $data['discount_code'] : null,
                         'tax'           => $this->getNumbers()->get('tax'),
@@ -176,28 +176,6 @@ class OrderRepository
             'subTotal' => $subTotal,
             'total' => $total,
         ]);
-    }
-
-    public function cancel($id)
-    {
-        $order = Order::where([
-                                ['user_id', $this->currentUser()->id],
-                                ['id', $id]
-                        ])->firstOrFail();
-
-        $order->update(['status' => 1]);
-
-        $orderProducts = OrderProduct::where('order_id', $order->id)->get();
-
-        foreach($orderProducts as $orderProduct)
-        {
-            $product = Product::find($orderProduct->product_id);
-
-            $product->update(['quantity' => $product->quantity + $orderProduct->quantity]);
-        }
-
-        return $order;
-
     }
 
 

@@ -110,7 +110,7 @@ class AddressRepository
     public function delete($id)
     {
         return  Address::where([
-                    ['user_id', $this->currentUser()->id],
+                    ['user_id', $this->addressRepository->currentUser()->id],
                     ['id', $id],
                 ])->firstorFail()->delete();
         

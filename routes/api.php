@@ -26,13 +26,6 @@ Route::group(['namespace' => 'API'], function(){
     Route::post('/register', 'UserController@register')->name('register');
 
     /**
-     * API Routes for password reset of user.
-     **/
-    Route::post('/sendPasswordResetLink', 'Auth\ResetPasswordController@sendEmail');
-    Route::post('/resetPassword', 'Auth\ChangePasswordController@process');
-
-
-    /**
      * API Routes for all and single category.
      **/
     Route::get('/categories', 'CategoryController@index');
@@ -43,14 +36,10 @@ Route::group(['namespace' => 'API'], function(){
      **/
     Route::get('/subcategory/{id}', 'SubCategoryController@show');
 
-    Route::post('/subcategory/filter/products/{id}', 'SubCategoryController@filter');
-    
-
 
     /**
      * API Route for products, its details and CRUD Operations.
      **/
-    Route::get('/products/featured', 'ProductController@featured');
     Route::get('/products/all', 'ProductController@index');
     Route::get('/product/{id}', 'ProductController@show');
 });
@@ -66,17 +55,11 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'API'], function(){
     Route::patch('/profile/update', 'UserController@update');
 
     /**
-     * API Route for users reviews and its Operations.
-     **/
-    Route::post('/product/review', 'ReviewController@store');
-
-    /**
      * API Route for users wishlist, its details and CRUD Operations.
      **/
     Route::post('/wishlist/products', 'WishListController@store');
     Route::get('/wishlist', 'WishListController@show');
     Route::delete('/wishlist/product/{id}', 'WishListController@destroy');
-
     /**
      * API Route for users cart, its details and CRUD Operations.
      **/
@@ -99,7 +82,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'API'], function(){
      **/
     Route::get('/orders', 'OrderController@index');
     Route::post('/order/place', 'OrderController@store');
-    Route::get('/order/cancel/{id}', 'OrderController@cancelOrder');
     Route::get('/order/{id}', 'OrderController@show');
     Route::get('/order/test/{id}', 'OrderController@index');
 });

@@ -25,7 +25,7 @@ class CreateAddressRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:191|min:3|unique:addresses',
-            'landmark' => 'required|string|max:191|min:3',
+            'landmark' => 'nullable|string|max:191|min:3',
             'city' => 'required|string|max:191',
             'pincode' => 'required|numeric|digits:6',
             'state' => 'required|string|max:191|min:2',

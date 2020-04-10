@@ -45,19 +45,19 @@ class Order extends Model
     	return $this->belongsTo(Address::class);
     }
 
-    // public function status()
-    // {
-    //     if($this->status == 0)
-    //     {
-    //         return "Order Placed.";
-    //     }
+    public function status()
+    {
+        if($this->status == 0)
+        {
+            return "Order Placed.";
+        }
 
-    //     if($this->status == 1)
-    //     {
-    //         return "Order Canceled.";
-    //     }
+        if($this->status == 1)
+        {
+            return "Order Canceled.";
+        }
 
-    //     return "Order Delivered.";
+        return "Order Delivered.";
 
-    // }
+    }
 }

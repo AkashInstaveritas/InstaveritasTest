@@ -25,8 +25,7 @@ class OrderTransformer extends Transformer
             'id'   => $order->id,
             'products' => $this->productTransformer->transformCollection($order->products()->get(), false),
             'total' => $order->total,
-            'status' => $order->status,
-            'placedOn' => $order->created_at            	
+            'status' => $order->status(),	            	
       ];
 				   
       $extras = [

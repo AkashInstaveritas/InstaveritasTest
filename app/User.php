@@ -11,7 +11,6 @@ use App\Models\Review;
 use App\Models\Order;
 use App\Models\Product;
 
-
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
@@ -22,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',         //varchar(191)
+        'name',         //varchar(191) 
         'email',        //varchar(191) unique
         'password',     //varchar(191)
         'phone',        //integer
@@ -72,7 +71,5 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Product::class, 'carts', 'user_id', 'product_id')->withPivot('quantity');
     }
-
-
-
+    
 }

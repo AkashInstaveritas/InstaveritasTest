@@ -53,24 +53,11 @@ class CartRepository
      */
     public function create(array $data)
     {
-        if(!empty($this->checkProduct($data['product_id'])))
-        {
-           return $this->incrementProductQuantity($data['product_id']);
-        }
-        else
-        {
-            Cart::create([
-            'user_id'    => $this->currentUser()->id,
-            'product_id' => $data['product_id'],
-            'quantity'   => $data['quantity'],
-            ]);
-
-            $message = "Product added to cart!";
-
-            return $message;
-        }
-
-         
+        return  Cart::create([
+                    'user_id'    => $this->currentUser()->id,
+                    'product_id' => $data['product_id'],
+                    'quantity'   => $data['quantity'],
+                ]);
         
     }
 
@@ -82,7 +69,10 @@ class CartRepository
      */
     public function update(array $data, $id)
     {
-        $cart = $this->checkProduct($id);
+        $cart =Cart::where([
+                    ['user_id', $this->currentUser()->id],
+                    ['product_id', $id],
+                ])->firstorFail();
         
         return $cart->update(['quantity' => $data['quantity']]);
 
@@ -100,37 +90,6 @@ class CartRepository
                     ['user_id', $this->currentUser()->id],
                     ['product_id', $id],
                 ])->firstorFail()->delete();
-    }
-
-    public function checkProduct($id)
-    {
-        $cart = Cart::where([
-                    ['user_id', $this->currentUser()->id],
-                    ['product_id', $id],
-                ])->first();
-
-        return $cart;
-    }
-
-    public function incrementProductQuantity($id)
-    {
-        $cart = $this->checkProduct($id);
-
-        if($cart->quantity <= 2)
-        {
-            $qty = $cart->quantity + 1;
-        
-            $cart->update(['quantity' => $qty]);
-
-            $message = "Product already added, Cart Updated!";
-
-            return $message;
-        }
-
-        $message = "Product already added, Reached maximum quantity!";
-
-        return $message;
-        
     }
     
 

@@ -25,7 +25,7 @@ class AddCartRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'required|exists:products,id|unique:carts,product_id,'.auth('api')->user()->id,
             'quantity'   => 'required|numeric|min:1|max:3' 
         ];
     }
